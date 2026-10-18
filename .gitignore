@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+docs/*.aux
+docs/*.fdb_latexmk
+docs/*.fls
+docs/*.log
+docs/*.out
+docs/*.toc
+docs/*.xdv
+docs/*.synctex.gz
