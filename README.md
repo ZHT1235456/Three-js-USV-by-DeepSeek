@@ -22,7 +22,9 @@
 
 ## 空 / SKYPRO XT
 
-同一套程序化建模方法换到空中：相邻 Three.js 项目 **SKYPRO XT** 的四轴航拍无人机。硬边机身、镜像三叶桨、三轴云台与实体起落架，在摄影棚和夜航灯下共用一套结构。
+同一套程序化建模方法换到空中：**SKYPRO XT** 的四轴航拍无人机。硬边机身、镜像三叶桨、三轴云台与实体起落架，在摄影棚和夜航灯下共用一套结构。
+
+源码与完整交互位于 [`drone/`](drone/)，可按 [`drone/README.md`](drone/README.md) 独立运行。
 
 | 夜航 | 正前 | 云台细节 |
 | --- | --- | --- |
@@ -55,7 +57,8 @@ npm run preview
 
 - [研究文档 PDF](docs/deepseek-modeling-level.pdf)
 - [LaTeX 源码](docs/deepseek-modeling-level.tex)
-- 文档图版位于 `docs/figures/`；无人机截图来自相邻项目 SKYPRO XT，用于横向展示同一套程序化建模能力。
+- 文档图版位于 `docs/figures/`；无人机源码与截图已归档于 [`drone/`](drone/)。
+- 无人机代码：[drone/](drone/)（SKYPRO XT，独立 Vite 工程）
 
 ## 备注
 

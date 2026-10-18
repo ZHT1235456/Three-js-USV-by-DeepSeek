@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e9e7e1" />
+    <meta
+      name="description"
+      content="SKYPRO XT — 基于参考图程序化重建的四轴航拍无人机。Three.js 实时渲染，碳纤维机身、三轴云台、三叶低噪桨与按航空惯例校准的航行灯。"
+    />
+    <meta property="og:title" content="SKYPRO XT — 精准航拍系统" />
+    <meta
+      property="og:description"
+      content="Three.js 实时三维重建：碳纤维机体、三轴云台、三叶低噪桨、前后向起落架与已校准的左红右绿航行灯。"
+    />
+    <meta property="og:type" content="website" />
+    <title>SKYPRO XT — 精准航拍系统</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2318191b'/%3E%3Cpath d='M16 6l7 17H9z' fill='none' stroke='%23f4f2ec' stroke-width='1.6'/%3E%3Ccircle cx='16' cy='17' r='3.2' fill='%23f4f2ec'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="backdrop" aria-hidden="true">
+        <div class="backdrop__glow"></div>
+        <div class="backdrop__grid"></div>
+        <div class="backdrop__rings"></div>
+        <div class="backdrop__grain"></div>
+      </div>
+
+      <div id="stage" aria-hidden="true"></div>
+
+      <div class="ui">
+        <header class="topbar">
+          <a class="brand" href="#" aria-label="SKYPRO">
+            <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+              <path d="M20 4.5 33.5 34h-27Z" />
+              <path d="M20 12.5 28.5 30h-17Z" />
+            </svg>
+            <span class="brand__name">SKYPRO</span>
+            <span class="brand__rule"></span>
+            <span class="brand__model">XT</span>
+          </a>
+          <div class="topbar__meta">
+            <span>系列 01</span>
+            <span class="topbar__sep"></span>
+            <span>空中影像系统</span>
+          </div>
+          <div class="topbar__right">
+            <span class="live"><i></i>实时渲染</span>
+            <button class="iconbtn" id="resetView" aria-label="复位视角" title="复位视角">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 11.5a8 8 0 1 1-2.2-5.6" />
+                <path d="M20 3.5v7h-7" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <main class="hero">
+          <section class="hero__copy">
+            <div class="eyebrow">
+              <span class="eyebrow__index">01</span>
+              <span class="eyebrow__line"></span>
+              <span>碳纤维一体机身 · 三轴云台</span>
+            </div>
+            <h1 class="hero__title">
+              <span class="hero__brand">SKYPRO</span>
+              <span class="hero__model">XT<span class="hero__dot">.</span></span>
+            </h1>
+            <p class="hero__cn">驭风而行，见所未见。</p>
+            <p class="hero__lede">
+              以航空级碳纤维与低噪三叶桨重新定义飞行质感。三轴机械云台、全向感知与 8K 影像链路，将每一次起飞，变成一次精准的凝视。
+            </p>
+
+            <div class="specs" aria-label="主要参数">
+              <div class="spec">
+                <span class="spec__k">轴距</span>
+                <span class="spec__v">354<small>mm</small></span>
+              </div>
+              <div class="spec">
+                <span class="spec__k">影像</span>
+                <span class="spec__v">8K<small>/ 60fps</small></span>
+              </div>
+              <div class="spec">
+                <span class="spec__k">续航</span>
+                <span class="spec__v">46<small>min</small></span>
+              </div>
+              <div class="spec">
+                <span class="spec__k">重量</span>
+                <span class="spec__v">895<small>g</small></span>
+              </div>
+            </div>
+
+            <button class="navlights" id="navInfo" aria-expanded="false" aria-controls="lightPanel">
+              <span class="navlights__dots">
+                <i class="dot dot--red"></i>
+                <i class="dot dot--green"></i>
+              </span>
+              <span class="navlights__text">
+                <strong>航行灯已校准</strong>
+                <em>左舷红 · 右舷绿</em>
+              </span>
+              <span class="navlights__arrow" aria-hidden="true">＋</span>
+            </button>
+          </section>
+
+          <aside class="hero__rail" aria-hidden="true">
+            <span class="hero__raillabel">DESIGNED FOR THE UNSEEN</span>
+            <span class="hero__railnum">01 / 04</span>
+          </aside>
+        </main>
+
+        <div class="hotspots" id="hotspots" aria-hidden="true"></div>
+
+        <aside class="lightpanel" id="lightPanel" aria-hidden="true">
+          <button class="lightpanel__close" id="lightClose" aria-label="关闭灯位说明">×</button>
+          <p class="lightpanel__eyebrow">NAVIGATION LIGHT CALIBRATION</p>
+          <h2>参考图的灯色存在矛盾</h2>
+          <p class="lightpanel__body">
+            四张参考图中，左右舷灯的绿 / 红色位并不一致；部分视角与航空航行灯惯例相反。模型已统一按航空标准重建：
+          </p>
+          <div class="lightpanel__diagram">
+            <div class="diagram">
+              <svg viewBox="0 0 260 176" role="img" aria-label="航行灯俯视示意：左舷红灯，右舷绿灯">
+                <circle cx="130" cy="90" r="80" fill="none" stroke="rgba(237,234,227,0.12)" stroke-dasharray="2 5" />
+                <g stroke="rgba(237,234,227,0.32)" stroke-width="1">
+                  <line x1="117" y1="66" x2="74" y2="51" />
+                  <line x1="143" y1="66" x2="186" y2="51" />
+                  <line x1="116" y1="115" x2="72" y2="132" />
+                  <line x1="144" y1="115" x2="188" y2="132" />
+                </g>
+                <g fill="rgba(237,234,227,0.05)" stroke="rgba(237,234,227,0.24)" stroke-width="0.8">
+                  <ellipse cx="68" cy="49" rx="27" ry="6.4" transform="rotate(-33 68 49)" />
+                  <ellipse cx="192" cy="49" rx="27" ry="6.4" transform="rotate(33 192 49)" />
+                  <ellipse cx="67" cy="134" rx="27" ry="6.4" transform="rotate(35 67 134)" />
+                  <ellipse cx="193" cy="134" rx="27" ry="6.4" transform="rotate(-35 193 134)" />
+                </g>
+                <rect x="112" y="53" width="36" height="75" rx="13" fill="rgba(237,234,227,0.1)" stroke="rgba(237,234,227,0.5)" stroke-width="1.2" />
+                <rect x="119" y="100" width="22" height="18" rx="4" fill="rgba(9,11,13,0.6)" stroke="rgba(237,234,227,0.3)" stroke-width="0.8" />
+                <circle cx="130" cy="109" r="4.4" fill="none" stroke="rgba(237,234,227,0.4)" stroke-width="0.8" />
+                <circle cx="68" cy="49" r="4.6" fill="#ff3b2f" />
+                <circle cx="192" cy="49" r="4.6" fill="#35df7b" />
+                <circle cx="67" cy="134" r="2.6" fill="rgba(237,234,227,0.35)" />
+                <circle cx="193" cy="134" r="2.6" fill="rgba(237,234,227,0.35)" />
+                <text x="130" y="17" text-anchor="middle" fill="rgba(237,234,227,0.42)" font-family="IBM Plex Mono, monospace" font-size="7" letter-spacing="2.4">FRONT / 前</text>
+                <text x="8" y="40" fill="#ff5a4d" font-family="IBM Plex Mono, monospace" font-size="7.5" letter-spacing="1.4">PORT · 左舷 红</text>
+                <text x="252" y="40" text-anchor="end" fill="#46e58b" font-family="IBM Plex Mono, monospace" font-size="7.5" letter-spacing="1.4">STARBOARD · 右舷 绿</text>
+                <text x="130" y="162" text-anchor="middle" fill="rgba(237,234,227,0.26)" font-family="IBM Plex Mono, monospace" font-size="6.5" letter-spacing="2">TOP VIEW · NAVIGATION LIGHTS</text>
+              </svg>
+            </div>
+          </div>
+          <ul class="lightpanel__list">
+            <li><i class="dot dot--red"></i><span>左舷航行灯</span><strong>红色 · 常亮</strong></li>
+            <li><i class="dot dot--green"></i><span>右舷航行灯</span><strong>绿色 · 常亮</strong></li>
+          </ul>
+          <p class="lightpanel__foot">拖动旋转机身，可核对两侧灯位。</p>
+        </aside>
+
+        <footer class="dock">
+          <div class="dock__group dock__group--views">
+            <span class="dock__label">机位 / CAMERA</span>
+            <div class="views" role="group" aria-label="机位选择">
+              <button class="view is-active" data-view="hero">三分之四</button>
+              <button class="view" data-view="front">正前</button>
+              <button class="view" data-view="top">正俯</button>
+              <button class="view" data-view="rear">后方</button>
+              <button class="view" data-view="detail">云台</button>
+            </div>
+          </div>
+
+          <span class="dock__divider" aria-hidden="true"></span>
+
+          <div class="dock__group dock__group--toggles">
+            <span class="dock__label">演示 / MOTION</span>
+            <div class="toggles">
+              <button class="toggle is-on" id="toggleOrbit" aria-pressed="true"><i></i>自动巡览</button>
+              <button class="toggle" id="toggleRotors" aria-pressed="false"><i></i>旋翼</button>
+              <button class="toggle" id="toggleLabels" aria-pressed="false"><i></i>标注</button>
+              <button class="toggle" id="toggleNight" aria-pressed="false"><i></i>夜航</button>
+            </div>
+          </div>
+
+          <span class="dock__divider" aria-hidden="true"></span>
+
+          <div class="dock__group dock__group--hint">
+            <span class="dock__label">操作 / EXPLORE</span>
+            <span class="hint">拖拽旋转 · 滚轮缩放 · 双击复位</span>
+          </div>
+        </footer>
+
+        <div class="coordinates" aria-hidden="true">
+          <span id="coords">X 00.0 · Y 00.0 · Z 00.0</span>
+        </div>
+      </div>
+
+      <div class="loader" id="loader">
+        <div class="loader__inner">
+          <svg class="loader__mark" viewBox="0 0 40 40" aria-hidden="true">
+            <path d="M20 4.5 33.5 34h-27Z" />
+            <path d="M20 12.5 28.5 30h-17Z" />
+          </svg>
+          <div class="loader__brand">SKYPRO <em>XT</em></div>
+          <div class="loader__track"><i id="loaderBar"></i></div>
+          <div class="loader__meta">
+            <span>构建机体 · 初始化材质 · 校准航行灯</span>
+            <span id="loaderPct">00</span>
+          </div>
+        </div>
+      </div>
+
+      <noscript><div class="noscript">请启用 JavaScript 以查看 SKYPRO XT 的实时三维模型。</div></noscript>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

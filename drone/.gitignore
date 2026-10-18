@@ -1,0 +1,8 @@
+node_modules
+dist
+.vite
+.DS_Store
+.chrome-profile
+.shots
+.crops
+.vite-dev.log
